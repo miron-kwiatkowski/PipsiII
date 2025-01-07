@@ -173,4 +173,7 @@
             </div>
         </div>
     </body>
+<script>
+    document.getElementById("test_api").innerHTML = "Test";
+</script>
 </html>
