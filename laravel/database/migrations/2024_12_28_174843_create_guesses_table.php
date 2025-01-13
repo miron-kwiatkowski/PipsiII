@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('UserId');
             $table->integer('PuzzleId');
             $table->integer('Points');
+            $table->integer('Time');
             $table->date('Date');
             $table->boolean('DidWin');
             $table->primary('ID');

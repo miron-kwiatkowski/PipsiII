@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('Xvalue');
             $table->integer('Yvalue');
             $table->string('IMGDesc');
+            $table->integer('Difficulty');
             $table->primary('ID');
         });
     }

@@ -29,6 +29,12 @@
         <label for="password">Password:</label>
         <input type="text" id="password" name="password"><br><br>
         <input type="submit" value="Submit">
+    </form><br><br>
+    <form action="/users/2/manage" method="post">
+        @csrf
+        <label for="currentgame">Current game:</label>
+        <input type="number" id="currentgame" name="currentgame"><br><br>
+        <input type="submit" value="Change">
     </form>
     <br><br><a href="{{ route('google.redirect') }}" class="btn btn-primary"> Login with Google </a>
     @if (\Session::has('error'))

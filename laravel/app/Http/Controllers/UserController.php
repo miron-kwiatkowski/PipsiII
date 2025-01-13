@@ -11,10 +11,10 @@ use Laravel\Socialite\Facades\Socialite;
 
 class UserController extends Controller
 {
-    //Wylistuj wszystkich uzytkownikow - tylko do testowania
+    //Wylistuj wszystkich uzytkownikow
     public function index()
     {
-        $users = users::all();
+        $users = users::all()->select('ID','Name','JoinDate','CurrentGame','IsAdmin','IsBanned');
         return response()->json($users);
     }
 
@@ -102,17 +102,30 @@ class UserController extends Controller
 
     //Modyfikowanie danych uzytkownika
     public function modify(Request $request) {
-        $user = users::where('Email', $request->email)->first();
-        if ($user) {
-            if ($request->name) {
-                $user->update(['Name'=>$request->name]);
-            }
-            if ($request->pfpnum) {
-                $user->update(['PfpNum'=>$request->pfpnum]);
-            }
-            if ($request->password) {
-                $user->update(['Password'=>Hash::make($request->password)]);
-            }
+        if(isset($request->name)) {
+            users::where('ID', $request->id)->update(['Name'=>$request->name]);
+        }
+        if(isset($request->pfpnum)) {
+            users::where('ID', $request->id)->update(['PfpNum'=>$request->pfpnum]);
+        }
+        if(isset($request->password)) {
+            users::where('ID', $request->id)->update(['Password'=>$request->password]);
+        }
+    }
+
+    //Modyfikowanie uzytkownika przez administratora
+    //currentgame - aktualna gra, uzywane przy przydzielaniu zagadki (int)
+    //isadmin - czy jest administratorem (bool)
+    //isbanned - czy jest zbanowany (bool)
+    public function adminmodify(Request $request) {
+        if(isset($request->currentgame)) {
+            users::where('ID', $request->id)->update(['CurrentGame'=>$request->currentgame]);
+        }
+        if(isset($request->isadmin)) {
+            users::where('ID', $request->id)->update(['IsAdmin'=>$request->isadmin]);
+        }
+        if(isset($request->isbanned)) {
+            users::where('ID', $request->id)->update(['IsBanned'=>$request->isbanned]);
         }
     }
 }

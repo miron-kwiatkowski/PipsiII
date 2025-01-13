@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
+use App\Http\Controllers\GameController;
 use Illuminate\Support\Facades\Artisan;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+Artisan::comand('reset', function () {
+    GameController::reset();
+})->purpose('Get a new puzzle for all users')->hourly();

@@ -10,5 +10,11 @@ class puzzles extends Model
     public $timestamps = false;
     use HasFactory;
     protected $table = 'puzzles';
-    protected $fillable = ['IMGSource','IMGDesc','Xvalue','Yvalue'];
+    protected $fillable = [
+        'IMGSource',
+        'IMGDesc',
+        'Xvalue',
+        'Yvalue',
+        'Difficulty',
+    ];
 }
