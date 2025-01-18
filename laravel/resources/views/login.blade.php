@@ -20,23 +20,14 @@
         @endif
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-    <form action="/register" method="post">
+    <form action="/users" method="post">
         @csrf
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name"><br><br>
-        <label for="email">Email:</label>
-        <input type="text" id="email" name="email"><br><br>
-        <label for="password">Password:</label>
-        <input type="text" id="password" name="password"><br><br>
+        <label for="access_token">Token:</label>
+        <input type="text" id="access_token" name="access_token">
         <input type="submit" value="Submit">
-    </form><br><br>
-    <form action="/users/2/manage" method="post">
-        @csrf
-        <label for="currentgame">Current game:</label>
-        <input type="number" id="currentgame" name="currentgame"><br><br>
-        <input type="submit" value="Change">
-    </form>
+    </form><br>
     <br><br><a href="{{ route('google.redirect') }}" class="btn btn-primary"> Login with Google </a>
+    <br><br><a href="{{ route('facebook.redirect') }}" class="btn btn-primary"> Login with Facebook </a>
     @if (\Session::has('error'))
         <div>
             <ul>

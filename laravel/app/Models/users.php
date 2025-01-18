@@ -23,6 +23,7 @@ class users extends Authenticatable
         'IsAdmin',
         'IsBanned',
         '_token',
+        'Type',
     ];
 
     protected $hidden = [

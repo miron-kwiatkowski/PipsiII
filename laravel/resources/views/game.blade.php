@@ -20,7 +20,7 @@
         @endif
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-    <form action="/game" method="post">
+    <form action="/users" method="post">
         @csrf
         <label for="xvalue">X:</label>
         <input type="number" id="xvalue" name="xvalue"><br><br>
@@ -34,6 +34,6 @@
     </form>
     </body>
 <script>
-    document.getElementById("test_api").innerHTML = "Test";
+
 </script>
 </html>

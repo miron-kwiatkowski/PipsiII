@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+            <img src="images/logo.png" alt="City Game Logo">
+        </a>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="logo">
+    <img src="images/logo.png" alt="City Game Logo">
+    <div class="logo-text">
+        <h1>Welcome to the game "City Game"</h1>
+        <p>Log in or register to get started!</p>
+    </div>
+</div>
+</body>
+<script>
+const apiUrl = 'http://127.0.0.1:8080/users/modify';
+const data = {
+  access_token: 'Ygc5K8XY9cd7RXToluAdiC6kidQ8uowqgvqjLo6HLFQ4I4YgDcZOpGoRgoib',
+  name: 'api-test',
+};
+const requestOptions = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(data),
+};
+
+
+// Make a GET request
+fetch(apiUrl, requestOptions)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+</script>
+</html>

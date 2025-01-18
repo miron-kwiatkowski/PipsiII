@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('IsAdmin');
             $table->boolean('IsBanned');
             $table->string('_token');
+            $table->string('Type');
             $table->primary('ID');
             $table->unique('_token');
         });

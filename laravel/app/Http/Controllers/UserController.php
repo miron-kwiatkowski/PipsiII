@@ -11,14 +11,37 @@ use Laravel\Socialite\Facades\Socialite;
 
 class UserController extends Controller
 {
-    //Wylistuj wszystkich uzytkownikow
-    public function index()
+    //Wylistuj wszystkich uzytkownikow (tylko dla administratora), request wymaga:
+    // 'access_token'
+    public function index(Request $request)
     {
-        $users = users::all()->select('ID','Name','JoinDate','CurrentGame','IsAdmin','IsBanned');
-        return response()->json($users);
+        if (isset($request->access_token)) {
+            if (users::where('_token', $request->access_token)->value('IsAdmin')) {
+                $users = users::all()->select('ID','Name','JoinDate','CurrentGame','IsAdmin','IsBanned');
+                return response([
+                    'data' => $users,
+                    'access_token' => $request->access_token,
+                    'message' => 'Retrieve successful'
+                ], 200);
+            } else {
+                return response([
+                    'data' => 'null',
+                    'access_token' => $request->access_token,
+                    'message' => 'Unauthorized',
+                ], 401);
+            }
+        }
+        return response([
+            'data' => 'null',
+            'access_token' => 'null',
+            'message' => 'Unauthorized',
+        ], 401);
     }
 
-    //Rejestracja uzytkownika w bazie danych
+    //Rejestracja uzytkownika w bazie danych, request wymaga:
+    // 'name'
+    // 'email'
+    // 'password'
     public function register(Request $request)
     {
         $passwordlength = strlen($request->password);
@@ -32,12 +55,20 @@ class UserController extends Controller
                     $users->Password = Hash::make($request->password);
                     $users->JoinDate = date('Y/m/d', time());
                     $users->PfpNum = rand(1, 10);
-                    $users->_token = Str::random(60);
+                    $users->CurrentGame = 1;
                     $users->save();
-                    return redirect('/login')->with('error', 'Account created successfully');
-                }else return redirect()->back()->with('error','Invalid name');
-            } else return redirect()->back()->with('error','Invalid email');
-        } else return redirect()->back()->with('error','Invalid password');
+                    return response([
+                        'message' => 'Registration successful',
+                    ], 200);
+                }else return response([
+                    'message' => 'Bad Request',
+                ], 400);
+            } else return response([
+                'message' => 'Bad Request',
+            ], 400);
+        } else return response([
+            'message' => 'Bad Request',
+        ], 400);
     }
 
     //Otworzenie autoryzacji google
@@ -46,11 +77,18 @@ class UserController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
+    //Otworzenie autoryzacji facebook
+    public function redirectToFacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
     //Tworzenie konta i logowanie poprzez google
     public function handleGoogleCallback()
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
-        $user = users::where('Email', $googleUser->email)->first();
+        $user = users::where('Email', $googleUser->email)->where('Type','g')->first();
+        $token = Str::random(60);
         if(!$user)
         {
             $user = users::create([
@@ -59,73 +97,137 @@ class UserController extends Controller
                 'Password' => Hash::make(rand(100000,999999)),
                 'JoinDate' => date('Y/m/d', time()),
                 'PfpNum' => rand(1, 10),
-                '_token' => Str::random(60),
+                'CurrentGame' => 1,
+                '_token' => $token,
+                'Type' => 'g',
             ]);
-        }
-        if (Auth::attempt(['email' => $user->Email, 'password' => $user->Password])) {
-            session(['email' => $user->Email,'name' => $user->Name, 'isadmin' => $user->IsAdmin]);
-            return redirect('/');
+            return response([
+                'access_token' => $token,
+                'message' => 'Register successful',
+            ], 200);
         } else {
-            return redirect('/login')->with('error','Something went wrong');
+            users::where('Email', $googleUser->email)->where('Type','g')->update(['_token' => $token]);
+            return response([
+                'access_token' => $token,
+                'message' => 'Login successful',
+            ], 200);
         }
     }
 
-    //Logowanie przez baze danych
+    //Tworzenie konta i logowanie poprzez facebook
+    public function handleFacebookCallback()
+    {
+        $facebookUser = Socialite::driver('facebook')->stateless()->user();
+        $user = users::where('Email', $facebookUser->email)->where('Type','fb')->first();
+        $token = Str::random(60);
+        if(!$user)
+        {
+            $user = users::create([
+                'Name' => $facebookUser->name,
+                'Email' => $facebookUser->email,
+                'Password' => Hash::make(rand(100000,999999)),
+                'JoinDate' => date('Y/m/d', time()),
+                'PfpNum' => rand(1, 10),
+                'CurrentGame' => 1,
+                '_token' => $token,
+                'Type' => 'fb',
+            ]);
+            return response([
+                'access_token' => $token,
+                'message' => 'Register successful',
+            ], 200);
+        } else {
+            users::where('Email', $facebookUser->email)->where('Type','fb')->update(['_token' => $token]);
+            return response([
+                'access_token' => $token,
+                'message' => 'Login successful',
+            ], 200);
+        }
+    }
+
+    //Logowanie przez baze danych, request wymaga:
+    // 'email'
+    // 'password'
     public function login(Request $request)
     {
-        $user = users::where('Email', $request->email)->first();
+        $user = users::where('Email', $request->email)->where('Type','db')->first();
         if (Hash::check($request->password, $user->Password)) {
             if ($user->IsBanned==1) {
-                return redirect()->back()->with('error','Account banned');
+                return response([
+                    'access_token' => 'null',
+                    'message' => 'Forbidden',
+                ], 403);
             }
-            if (Auth::attempt(['email'=>$request->email,'password'=>$request->password])) {
-                session(['email' => $user->Email,'name' => $user->Name, 'isadmin' => $user->IsAdmin]);
-                return redirect('/');
-            }
-            else
-            {
-                return redirect()->back()->with('error','Something went wrong');
-            }
+            $token = Str::random(60);
+            users::where('Email', $request->email)->where('Type','db')->update(['_token' => $token]);
+            return response([
+                'access_token' => $token,
+                'message' => 'Login successful',
+            ], 200);
         } else {
-            return redirect()->back()->with('error','Wrong login');
+            return response([
+                'access_token' => 'null',
+                'message' => 'Unauthorized',
+            ], 401);
         }
     }
 
-    //Wylogowanie
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect('/');
-    }
-
-    //Modyfikowanie danych uzytkownika
+    //Modyfikowanie danych uzytkownika, request wymaga:
+    // 'access_token'
+    // 'name' (opcjonalne)
+    // 'pfpnum' (opcjonalne)
+    // 'password' (opcjonalne)
     public function modify(Request $request) {
-        if(isset($request->name)) {
-            users::where('ID', $request->id)->update(['Name'=>$request->name]);
+        if (isset($request->access_token)) {
+            if (isset($request->name)) {
+                users::where('_token', $request->access_token)->update(['Name' => $request->name]);
+            }
+            if (isset($request->pfpnum)) {
+                users::where('_token', $request->access_token)->update(['PfpNum' => $request->pfpnum]);
+            }
+            if (isset($request->password)) {
+                users::where('_token', $request->access_token)->update(['Password' => $request->password]);
+            }
+            return response([
+                'access_token' => $request->access_token,
+                'message' => 'Modify successful',
+            ], 200);
         }
-        if(isset($request->pfpnum)) {
-            users::where('ID', $request->id)->update(['PfpNum'=>$request->pfpnum]);
-        }
-        if(isset($request->password)) {
-            users::where('ID', $request->id)->update(['Password'=>$request->password]);
-        }
+        return response([
+            'access_token' => 'null',
+            'message' => 'Unauthorized',
+        ], 401);
     }
 
-    //Modyfikowanie uzytkownika przez administratora
-    //currentgame - aktualna gra, uzywane przy przydzielaniu zagadki (int)
-    //isadmin - czy jest administratorem (bool)
-    //isbanned - czy jest zbanowany (bool)
+    //Modyfikowanie uzytkownika (tylko dla administratora), request wymaga:
+    // 'access_token'
+    // 'userid'
+    // 'currentgame' (opcjonalne)
+    // 'isadmin' (opcjonalne)
+    // 'isbanned' (opcjonalne)
     public function adminmodify(Request $request) {
-        if(isset($request->currentgame)) {
-            users::where('ID', $request->id)->update(['CurrentGame'=>$request->currentgame]);
+        if (isset($request->access_token)) {
+            if (isset($request->userid)) {
+                if (users::where('_token', $request->access_token)->value('IsAdmin')) {
+                    if(isset($request->currentgame)) {
+                        users::where('ID', $request->userid)->update(['CurrentGame'=>$request->currentgame]);
+                    }
+                    if(isset($request->isadmin)) {
+                        users::where('ID', $request->userid)->update(['IsAdmin'=>$request->isadmin]);
+                    }
+                    if(isset($request->isbanned)) {
+                        users::where('ID', $request->userid)->update(['IsBanned'=>$request->isbanned]);
+                    }
+                }
+            }
+            return response([
+                'access_token' => $request->access_token,
+                'message' => 'Modify successful',
+            ], 200);
         }
-        if(isset($request->isadmin)) {
-            users::where('ID', $request->id)->update(['IsAdmin'=>$request->isadmin]);
-        }
-        if(isset($request->isbanned)) {
-            users::where('ID', $request->id)->update(['IsBanned'=>$request->isbanned]);
-        }
+        return response([
+            'access_token' => 'null',
+            'message' => 'Unauthorized',
+        ], 401);
     }
 }
