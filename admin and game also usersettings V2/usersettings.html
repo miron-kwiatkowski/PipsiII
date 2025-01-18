@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>City Game</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="userphoto.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="admin-panel-settings">
+  <form id="userSettingsForm">
+    <h2>User Settings</h2>
+    <div class="settings-group">
+      <label for="username">User</label>
+      <input type="text" id="username" name="name" placeholder="Enter your name">
+    </div>
+    <div class="settings-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email">
+    </div>
+    <div class="settings-group">
+      <label for="profilePicture">Profile Picture</label>
+      <div class="profile-picture-container">
+        <img id="profilePreview" src="images/Sample_User_Icon.png" alt="Profile Preview" class="img-thumbnail">
+        <input type="file" id="profilePicture" name="profilePicture" accept="image/*" onchange="previewImage(event)">
+      </div>
+      <div class="button-container">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+
+ </body>
+</html>
