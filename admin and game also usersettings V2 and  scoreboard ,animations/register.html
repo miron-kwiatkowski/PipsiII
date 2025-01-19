@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>City Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src =check_register.js></script>
+</head>
+<body>
+<header>
+    <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+            <img src="images/logo.png" alt="City Game Logo">
+        </a>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="Autors.html">About</a></li>
+                <li><a href="usersettings.html">Usersetting</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="container">
+    <form id="registrationForm">
+        <h2>Register</h2>
+
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+
+
+        <label for="confirmPassword">Repeat Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repeat Password" required>
+
+        <div id="message" class="hidden"></div>
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/logo.png" alt="City Game Logo">
+            </a>
+            <nav class="navbar">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="usersettings.html">User Settings</a> </li>
+                    <li><a href="gallery.html">Gallery Photos</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="admin-panel">
+        <div class="admin-panel-settings">
+            <form>
+                <h2>
+                    Settings
+                </h2>
+                <div class="settings-group">
+                    <label for="time">
+                        <b> Select time </b>
+                    </label>
+                    <input type="time" id="time" name="time">
+                </div>
+                <div class="settings-group">
+                    <label for="distance">
+                        <b> Select distance </b>
+                    </label>
+                    <input type="number" id="distance" name="distance">
+                </div>
+                <div class="settings-group">
+                    <label for="days">
+                        <b> Select days </b>
+                    </label>
+                    <input type="number" id="days" name="days">
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+        <div class="admin-panel-stats1">
+            <div class="admin-panel-stats1-main">
+                <div class="stats1-item">
+                    <div class="image-container">
+                        <img src="images/gamePlaceholder.PNG">
+                    </div>
+                    <b> Question 3 </b>
+                    <p> <b>Anwsered:</b> 5/10 </p>
+                    <p> <b>Mean:</b> 9.2 pt </p>
+                    <p> <b>Time:</b> 120 s </p>
+                    <p> <b>Distance:</b> 203 m </p>
+                </div>
+                <div class="stats1-item">
+                    <div class="image-container">
+                        <img src="images/gamePlaceholder.PNG">
+                    </div>
+                    <b> Question 3 </b>
+                    <p> <b>Anwsered:</b> 5/10 </p>
+                    <p> <b>Mean:</b> 9.2 pt </p>
+                    <p> <b>Time:</b> 120 s </p>
+                    <p> <b>Distance:</b> 203 m </p>
+                </div>
+                <div class="stats1-item">
+                    <div class="image-container">
+                        <img src="images/gamePlaceholder.PNG">
+                    </div>
+                    <b> Question 3 </b>
+                    <p> <b>Anwsered:</b> 5/10 </p>
+                    <p> <b>Mean:</b> 9.2 pt </p>
+                    <p> <b>Time:</b> 120 s </p>
+                    <p> <b>Distance:</b> 203 m </p>
+                </div>
+                <div class="stats1-item">
+                    <div class="image-container">
+                        <img src="images/gamePlaceholder.PNG">
+                    </div>
+                    <b> Question 3 </b>
+                    <p> <b>Anwsered:</b> 5/10 </p>
+                    <p> <b>Mean:</b> 9.2 pt </p>
+                    <p> <b>Time:</b> 120 s </p>
+                    <p> <b>Distance:</b> 203 m </p>
+                </div>
+                <div class="stats1-item">
+                    <div class="image-container">
+                        <img src="images/gamePlaceholder.PNG">
+                    </div>
+                    <b> Question 3 </b>
+                    <p> <b>Anwsered:</b> 5/10 </p>
+                    <p> <b>Mean:</b> 9.2 pt </p>
+                    <p> <b>Time:</b> 120 s </p>
+                    <p> <b>Distance:</b> 203 m </p>
+                </div>
+                <div class="stats1-item">
+                    <div class="image-container">
+                        <img src="images/gamePlaceholder.PNG">
+                    </div>
+                    <b> Question 3 </b>
+                    <p> <b>Anwsered:</b> 5/10 </p>
+                    <p> <b>Mean:</b> 9.2 pt </p>
+                    <p> <b>Time:</b> 120 s </p>
+                    <p> <b>Distance:</b> 203 m </p>
+                </div>
+            </div>
+        </div>
+        <div class="admin-panel-stats2">
+            <div class="stats1-item2">
+                <b> Summary: </b>
+                <p> <b>Questions:</b> 10 </p>
+                <p> <b>Anwsered:</b> 10/20 </p>
+                <p> <b>Mean:</b> 10 pt </p>
+                <p> <b>Time:</b> 100 s </p>
+                <p> <b>Distance:</b> 100 m </p>
+            </div>
+        </div>
+        <div class="admin-panel-users">
+            <div class="admin-panel-user-list">
+                <div class="admin-user-list-user" onclick="onUserClick(1)">
+                    <div class="image-container">
+                        <img src="images/Sample_User_Icon.png">
+                    </div>
+                    <b> User 1: </b>
+                    <p> <b>Username:</b> abcdefg </p>
+                    <p> <b>Email adress:</b> abc@gmail.com </p>
+                    <p> <b>Account type:</b> user </p>
+                    <p> <b>Register date:</b> 10.10.2010 </p>
+                    <p> <b>Last logged in:</b> 17.01.2025 </p>
+                </div>
+                <div class="admin-user-list-user" onclick="onUserClick(2)">
+                    <div class="image-container">
+                        <img src="images/Sample_User_Icon.png">
+                    </div>
+                    <b> User 1: </b>
+                    <p> <b>Username:</b> abcdefg </p>
+                    <p> <b>Email adress:</b> abc@gmail.com </p>
+                    <p> <b>Account type:</b> user </p>
+                    <p> <b>Register date:</b> 10.10.2010 </p>
+                    <p> <b>Last logged in:</b> 17.01.2025 </p>
+                </div>
+                <div class="admin-user-list-user" onclick="onUserClick(3)">
+                    <div class="image-container">
+                        <img src="images/Sample_User_Icon.png">
+                    </div>
+                    <b> User 1: </b>
+                    <p> <b>Username:</b> ababcdefg </p>
+                    <p> <b>Email adress:</b> abc@gmail.com </p>
+                    <p> <b>Account type:</b> user </p>
+                    <p> <b>Register date:</b> 10.10.2010 </p>
+                    <p> <b>Last logged in:</b> 17.01.2025 </p>
+                </div>
+                <div class="admin-user-list-user" onclick="onUserClick(4)">
+                    <div class="image-container">
+                        <img src="images/Sample_User_Icon.png">
+                    </div>
+                    <b> User 1: </b>
+                    <p> <b>Username:</b> abcdefg </p>
+                    <p> <b>Email adress:</b> abc@gmail.com </p>
+                    <p> <b>Account type:</b> user </p>
+                    <p> <b>Register date:</b> 10.10.2010 </p>
+                    <p> <b>Last logged in:</b> 17.01.2025 </p>
+                </div>
+                <div class="admin-user-list-user" onclick="onUserClick(5)">
+                    <div class="image-container">
+                        <img src="images/Sample_User_Icon.png">
+                    </div>
+                    <b> User 1: </b>
+                    <p> <b>Username:</b> abcdefg </p>
+                    <p> <b>Email adress:</b> abc@gmail.com </p>
+                    <p> <b>Account type:</b> user </p>
+                    <p> <b>Register date:</b> 10.10.2010 </p>
+                    <p> <b>Last logged in:</b> 17.01.2025 </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="adminPanel.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login form</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src =checklogin.js></script>
+</head>
+<body>
+<header>
+<div class="nav-container">
+    <a href="index.html" class="nav-logo">
+        <img src="images/logo.png" alt="City Game Logo">
+    </a>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="Autors.html">About</a></li>
+            <li><a href="usersettings.html">Usersetting</a></li>
+        </ul>
+    </nav>
+</div>
+</header>
+    <div class="container">
+        <form id="loginForm">
+            <h2>Login</h2>
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="Email">
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password">
+
+            <div id="message" class="hidden"></div>
+
+            <button type="submit" id="loginButton"> Login in</button>
+
+        </form>
+        <div class="social-buttons">
+            <p>Or login by</p>
+            <button class="social-btn google" onclick="loginWithGoogle()">
+                <img src="images/google.png" alt="Google" class="icon">Continue by Google
+            </button>
+            <button class="social-btn apple" onclick="loginWithApple()">
+                <img src="images/appe.png" alt="Apple" class="icon">Continue by Apple
+            </button>
+            <button class="social-btn facebook" onclick="loginWithFacebook()">
+                <img src="images/fb.png" alt="Facebook" class="icon">Continue by Facebook
+            </button>
+        </div>
+        <h3><a href="register.html" class="signup-link">Create an account</a></h3>
+    </div>
+</body>
+</html>

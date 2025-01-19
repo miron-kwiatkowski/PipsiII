@@ -1,0 +1,626 @@
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, rgb(37, 103, 225), rgb(209, 166, 37));
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white;
+}
+
+/* Styles for containers */
+.container,
+.main-container {
+    text-align: center;
+    background-color: #222;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.9);
+    width: 300px;
+}
+
+.main-container {
+    width: auto;
+    /* Allows more flexibility for the main container width */
+}
+
+
+
+/* Headings and paragraphs */
+h1 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1em;
+    margin-bottom: 20px;
+}
+
+/* Logo */
+.logo {
+    text-align: center;
+}
+
+.logo img {
+    width: 600px;
+    height: 500px;
+    margin-bottom: 10px;
+}
+
+.logo-text {
+    margin-top: 10px;
+}
+
+.logo-text h1 {
+    font-size: 1.8em;
+    margin-bottom: 5px;
+}
+
+.logo-text p {
+    font-size: 1em;
+}
+
+/* Form inputs */
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Buttons */
+button,
+.button {
+    padding: 20px 30px;
+    margin: 10px 0;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+button:hover,
+.button:hover {
+    background-color: #45a049;
+}
+
+/* Social buttons */
+.icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+.social-buttons {
+    margin-top: 10px;
+}
+
+.social-btn {
+    width: 90%;
+    margin: 5px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.google {
+    background-color: #dd4b39;
+}
+
+.apple {
+    background-color: #1b1a1aa6;
+}
+
+.facebook {
+    background-color: #3b5998;
+}
+
+/* Hidden elements */
+.hidden {
+    display: none;
+}
+
+/* Error messages */
+#error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+/* Signup link */
+.signup-link {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #eae8e2;
+    text-decoration: none;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+    color: #2567e1;
+}
+
+/* Button container for main page */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+header {
+    background-color: #222;
+    padding: 10px 0;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    /* Dodano flexbox do nagłówka */
+    justify-content: center;
+    /* Wyśrodkowanie zawartości w nagłówku */
+    align-items: center;
+    /* Wyrównanie elementów w pionie */
+}
+
+.nav-container {
+    display: flex;
+    justify-content: center;
+    /* Menu nawigacyjne pozostaje wyśrodkowane */
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    position: relative;
+    /* Ustawienie relatywne dla precyzyjnego pozycjonowania logo */
+}
+
+.nav-logo {
+    position: absolute;
+    /* Ustawienie absolutne, aby logo znajdowało się po lewej stronie */
+    left: 0;
+    /* Przesunięcie logo do lewej krawędzi kontenera */
+}
+
+.nav-logo img {
+    width: 100px;
+    /* Rozmiar logo */
+    height: auto;
+}
+
+.navbar {
+    display: flex;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    /* Wyśrodkowanie elementów nawigacyjnych */
+}
+
+.nav-links li {
+    text-align: center;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1em;
+    transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+    color: #2567e1;
+}
+
+/* Responsive Navigation */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-logo {
+        position: static;
+        /* Powrót do standardowego układu na urządzeniach mobilnych */
+        margin-bottom: 10px;
+    }
+}
+
+.game-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 40px;
+}
+
+.left-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.left-container img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid gray;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.middle-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.middle-container h1 {
+    text-align: center;
+}
+
+.right-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.right-container img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid gray;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.admin-panel {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 40px;
+}
+
+.admin-panel-settings {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 600px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-panel-stats1 {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 600px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-panel-stats2 {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 600px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-panel-users {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 600px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-panel-stats1-main {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    gap: 0px;
+    padding: -50px;
+    overflow-x: auto;
+}
+
+.stats1-item {
+    flex: 1;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid gray;
+    border-radius: 10px;
+    width: 150px;
+    height: 479px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stats1-item2 {
+    flex: 1;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid gray;
+    border-radius: 10px;
+    line-height: 65px;
+    width: 365px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-panel-user-list {
+    flex: 1;
+    text-align: center;
+    gap: 0px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid gray;
+    border-radius: 10px;
+    width: 450px;
+    height: 400px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+}
+
+.stats1-item img {
+    height: 200px;
+    width: 100px;
+    border: 2px solid gray;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    object-fit: contain;
+}
+
+.admin-user-list-user {
+    flex: 1;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid gray;
+    border-radius: 10px;
+    width: 150px;
+    height: 475px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-user-list-user:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+.admin-user-edit-item {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid gray;
+    border-radius: 10px;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-user-edit-item-info {
+    text-align: center;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid gray;
+    border-radius: 10px;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-container {
+    height: 200px;
+    width: 100px;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+}
+
+.image-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+
+}
+.profile-picture-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.profile-picture-container img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-picture-container input {
+    display: block;
+    margin: 0 auto;
+    max-width: 200px;
+    text-align: center;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+.gallery-image {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.gallery-image:hover {
+    transform: scale(1.05);
+}
+
+#map {
+    height: 500px;
+    width: 500px;
+}
+.scoreboard-container {
+    margin: 50px auto;
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.table {
+    margin-top: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.table thead {
+    background-color: #333;
+    color: #fff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgb(170, 17, 53); /* Kolor dla nieparzystych wierszy */
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: rgb(170, 17, 53); /* Kolor dla parzystych wierszy */
+}
+
+/* Aby ustawić jednolity kolor tła we wszystkich komórkach (tzn. dla każdej komórki) */
+.table-striped tbody tr td {
+    background-color: rgb(170, 17, 53); /* Ujednolicony kolor dla każdej komórki */
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.table.fade-in tbody tr {
+    animation: fadeIn 5s ease-in forwards;
+}
+.team-member {
+    background-color: rgba(110, 209, 129, 0.5);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+
+.avatar {
+    font-size: 40px;
+    font-weight: bold;
+    color: rgb(234, 232, 226);
+    background-color: #333;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.avatar.fade-in {
+    animation: fadeIn 0.5s ease-in forwards;
+}

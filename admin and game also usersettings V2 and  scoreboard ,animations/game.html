@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Game</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Mapa -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/logo.png" alt="City Game Logo">
+            </a>
+            <nav class="navbar">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="usersettings.html">User Settings</a> </li>
+                    <li><a href="Autors.html">About</a></li>
+                    <li><a href="Scoreboard.html">Scoreboart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="game-container">
+        <div class="left-container">
+            <img src="images/gamePlaceholder.PNG">
+        </div>
+        <div class="middle-container">
+            <h1>
+                Try to guess localisation based on this picture
+            </h1>
+        </div>
+        <div class="right-container">
+            <div id="map"></div>
+            <p id="coordinates"></p>
+        </div>
+    </div>
+    <script src="game.js"></script>
+
+</body>
+
+</html>
