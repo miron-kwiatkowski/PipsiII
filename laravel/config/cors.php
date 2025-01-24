@@ -16,11 +16,7 @@ return [
     */
 
     'paths' => [
-        '/users/*',
-        '/puzzles/*',
-        '/guesses/*',
-        '/gamesettings/*',
-        '/game/*',
+        'api/*',
         'sanctum/csrf-cookie',
     ],
 

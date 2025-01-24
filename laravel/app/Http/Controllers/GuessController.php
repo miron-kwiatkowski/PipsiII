@@ -25,23 +25,21 @@ class GuessController extends Controller
                     $data = response()->json(['Winrate' => $winrate . "%", 'Last guess' => $lastguess, 'Points average' => $pointavg, 'Time avg' => $timeavg]);
                     return response([
                         'data' => $data,
-                        'access_token' => $request->access_token,
                         'message' => 'Stats fetched',
                     ], 200);
                 }
                 return response([
                     'data' => 'null',
-                    'access_token' => $request->access_token,
                     'message' => 'Puzzle not found',
                 ], 404);
             }
             return response([
-                'access_token' => $request->access_token,
+                'data' => 'null',
                 'message' => 'Unauthorized',
             ], 401);
         }
         return response([
-            'access_token' => 'null',
+            'data' => 'null',
             'message' => 'Unauthorized',
         ], 401);
     }

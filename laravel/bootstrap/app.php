@@ -12,11 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: [
-            'users/*',
-            'puzzles/*',
-            'guesses/*',
-            'gamesettings/*',
-            'game/*',
+            'api/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

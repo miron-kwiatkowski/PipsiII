@@ -34,45 +34,40 @@ class GameController extends Controller
     // 'access_token'
     public function get(Request $request) {
         if (isset($request->access_token)) {
-            if (guesses::where('_token', $request->access_token)->where('Date', date('Y/m/d', time()))->exists()) {
-                $guess = guesses::where('_token', $request->access_token)->where('Date', date('Y/m/d', time()))->first();
+            $userid = (users::where('_token', $request->access_token)->value('ID'));
+            if (guesses::where('UserId', $userid)->where('Date', date('Y/m/d', time()))->exists()) {
+                $guess = guesses::where('UserId', $userid)->where('Date', date('Y/m/d', time()))->first();
                 return response([
-                    'data' => response()->json(['Points' => $guess->Points, 'Time' => $guess->Time, 'DidWin' => $guess->DidWin]),
-                    'access_token' => $request->access_token,
+                    'data' => response()->json(['source' => $guess->IMGSource, 'points' => $guess->Points, 'time' => $guess->Time, 'didwin' => $guess->DidWin]),
                     'message' => 'Stats displayed'
                 ], 200);
             }
-            if (users::where('_token', $request->access_token)->exists()) {
-                $puzzleid = users::where('ID', $request->access_token)->value('CurrentGame');
+
+            if ($userid) {
+                $puzzleid = users::where('_token', $request->access_token)->value('CurrentGame');
             } else $puzzleid = 0;
+
             $puzzle = puzzles::select('IMGSource', 'Difficulty')->where('ID', $puzzleid)->first();
             if ($puzzle) {
-                $imagepath = storage_path('/images/' . $puzzle->IMGSource);
-                if (file_exists($imagepath)) {
-                    $response = response()->file($imagepath);
-                } else $response = response()->file(storage_path('/images/missing.png'));
                 return response([
-                    'data' => $response,
-                    'access_token' => $request->access_token,
-                    'message' => 'Stats displayed'
+                    'source' => $puzzle->IMGSource,
+                    'difficulty' => $puzzle->Difficulty,
+                    'message' => 'Stats displayed',
                 ], 200);
             }
             return response([
                 'data' => 'null',
-                'access_token' => $request->access_token,
-                'message' => 'Puzzle not found'
+                'message' => 'Puzzle not found',
             ], 404);
         }
         return response([
             'data' => 'null',
-            'access_token' => 'null',
-            'message' => 'Unauthorized'
+            'message' => 'Unauthorized',
         ], 401);
     }
 
     //Przesylanie zgadniec, request wymaga:
-    // 'userid' - numer uzytkownika (number)
-    // 'puzzleid' - numer zagadki (number)
+    // 'access_token' - numer uzytkownika (number)
     // 'xvalue' - wspolrzedna X (number)
     // 'yvalue' - wspolrzedna Y (number)
     // 'time' - ile czasu zajelo rozwiazanie zagadki w sekundach (number)
@@ -80,19 +75,19 @@ class GameController extends Controller
         if (isset($request->access_token)) {
             $x1 = $request->xvalue;
             $y1 = $request->yvalue;
+            $userid = users::where('_token', $request->access_token)->value('ID');
+            $puzzleid = users::where('_token', $request->access_token)->value('CurrentGame');
             $result = 0;
             if (isset($x1)&&isset($y1)) {
-                $puzzle = puzzles::select('XValue','YValue','IMGDesc')->where('ID', $request->puzzleid)->first();
+                $puzzle = puzzles::select('XValue','YValue','IMGDesc')->where('ID', $puzzleid)->first();
                 if ($puzzle) {
                     $x2 = $puzzle->XValue;
                     $y2 = $puzzle->YValue;
                     $distance = round(sqrt(pow(($x2-$x1),2)+pow(($y2-$y1),2)),2);
-
                     $timebonus = 1000;
                     $time = $request->time - 10;
                     if ($time>0) $timebonus = 1000 - ($time * 20);
                     if ($timebonus<0) $timebonus = 0;
-
                     $rules = gamesettings::all()->sortByDesc('ID')->first();
                     if ($rules) {
                         if ($distance<=$rules->MinDistance) {
@@ -103,9 +98,8 @@ class GameController extends Controller
                             $result = round((5000-((($distance - $rules->MinDistance)/ $rules->MaxDistance) * 5000)),0) + $timebonus;
                         }
                         $guess = new guesses();
-                        $id = users::where('_token', $request->access_token)->value('ID');
-                        $guess->UserId = $id;
-                        $guess->PuzzleId = $request->puzzleid;
+                        $guess->UserId = $userid;
+                        $guess->PuzzleId = $puzzleid;
                         $guess->Points = $result;
                         $guess->Time = $request->time;
                         $guess->Date = date('Y/m/d', time());
@@ -117,31 +111,26 @@ class GameController extends Controller
                         $guess->save();
                         return response([
                             'data' => $guess,
-                            'access_token' => $request->access_token,
                             'message' => 'Guess saved'
                         ], 200);
                     }
                     return response([
                         'data' => 'null',
-                        'access_token' => $request->access_token,
                         'message' => 'Data not found'
                     ], 404);
                 }
                 return response([
                     'data' => 'null',
-                    'access_token' => $request->access_token,
                     'message' => 'Data not found'
                 ], 404);
             }
             return response([
                 'data' => 'null',
-                'access_token' => $request->access_token,
                 'message' => 'Bad request'
             ], 400);
         }
         return response([
             'data' => 'null',
-            'access_token' => 'null',
             'message' => 'Unauthorized'
         ], 401);
     }

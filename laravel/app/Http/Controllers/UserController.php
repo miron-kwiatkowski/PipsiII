@@ -20,20 +20,17 @@ class UserController extends Controller
                 $users = users::all()->select('ID','Name','JoinDate','CurrentGame','IsAdmin','IsBanned');
                 return response([
                     'data' => $users,
-                    'access_token' => $request->access_token,
                     'message' => 'Retrieve successful'
                 ], 200);
             } else {
                 return response([
                     'data' => 'null',
-                    'access_token' => $request->access_token,
                     'message' => 'Unauthorized',
                 ], 401);
             }
         }
         return response([
             'data' => 'null',
-            'access_token' => 'null',
             'message' => 'Unauthorized',
         ], 401);
     }
@@ -46,29 +43,35 @@ class UserController extends Controller
     {
         $passwordlength = strlen($request->password);
         $namelength = strlen($request->name);
-        if ($passwordlength>=6&&$passwordlength<=40) {
-            if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
-                if ($namelength>0&&$namelength<=40) {
-                    $users = new users();
-                    $users->Name = $request->name;
-                    $users->Email = $request->email;
-                    $users->Password = Hash::make($request->password);
-                    $users->JoinDate = date('Y/m/d', time());
-                    $users->PfpNum = rand(1, 10);
-                    $users->CurrentGame = 1;
-                    $users->save();
-                    return response([
-                        'message' => 'Registration successful',
-                    ], 200);
-                }else return response([
+        if (users::where('Email', $request->email)->exists()) {
+             return response([
+                'message' => 'Email taken',
+            ], 400);
+        } else {
+            if ($passwordlength>=6&&$passwordlength<=40) {
+                if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+                    if ($namelength>0&&$namelength<=40) {
+                        $users = new users();
+                        $users->Name = $request->name;
+                        $users->Email = $request->email;
+                        $users->Password = Hash::make($request->password);
+                        $users->JoinDate = date('Y/m/d', time());
+                        $users->PfpNum = rand(1, 10);
+                        $users->CurrentGame = 1;
+                        $users->save();
+                        return response([
+                            'message' => 'Registration successful',
+                        ], 200);
+                    }else return response([
+                        'message' => 'Bad Request',
+                    ], 400);
+                } else return response([
                     'message' => 'Bad Request',
                 ], 400);
             } else return response([
                 'message' => 'Bad Request',
             ], 400);
-        } else return response([
-            'message' => 'Bad Request',
-        ], 400);
+        }
     }
 
     //Otworzenie autoryzacji google
@@ -155,6 +158,8 @@ class UserController extends Controller
             if ($user->IsBanned==1) {
                 return response([
                     'access_token' => 'null',
+                    'username' => 'null',
+                    'pfp' => 'null',
                     'message' => 'Forbidden',
                 ], 403);
             }
@@ -162,11 +167,15 @@ class UserController extends Controller
             users::where('Email', $request->email)->where('Type','db')->update(['_token' => $token]);
             return response([
                 'access_token' => $token,
+                'username' => $user->Name,
+                'pfp' => $user->PfpNum,
                 'message' => 'Login successful',
             ], 200);
         } else {
             return response([
                 'access_token' => 'null',
+                'username' => 'null',
+                'pfp' => 'null',
                 'message' => 'Unauthorized',
             ], 401);
         }
@@ -186,15 +195,13 @@ class UserController extends Controller
                 users::where('_token', $request->access_token)->update(['PfpNum' => $request->pfpnum]);
             }
             if (isset($request->password)) {
-                users::where('_token', $request->access_token)->update(['Password' => $request->password]);
+                users::where('_token', $request->access_token)->update(['Password' => Hash::make($request->password)]);
             }
             return response([
-                'access_token' => $request->access_token,
                 'message' => 'Modify successful',
             ], 200);
         }
         return response([
-            'access_token' => 'null',
             'message' => 'Unauthorized',
         ], 401);
     }
@@ -218,15 +225,16 @@ class UserController extends Controller
                     if(isset($request->isbanned)) {
                         users::where('ID', $request->userid)->update(['IsBanned'=>$request->isbanned]);
                     }
+                    return response([
+                        'message' => 'Modify successful',
+                    ], 200);
                 }
+                return response([
+                    'message' => 'Unauthorized',
+                ], 401);
             }
-            return response([
-                'access_token' => $request->access_token,
-                'message' => 'Modify successful',
-            ], 200);
         }
         return response([
-            'access_token' => 'null',
             'message' => 'Unauthorized',
         ], 401);
     }

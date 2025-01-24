@@ -18,26 +18,23 @@ class PuzzleController extends Controller
                 $puzzles = puzzles::all();
                 return response([
                     'data' => $puzzles,
-                    'access_token' => $request->access_token,
                     'message' => 'Retrieve successful'
                 ], 200);
             }
             return response([
                 'data' => 'null',
-                'access_token' => $request->access_token,
                 'message' => 'Unauthorized',
             ], 401);
         }
         return response([
             'data' => 'null',
-            'access_token' => 'null',
             'message' => 'Unauthorized',
         ], 401);
     }
 
     //Tworzenie zagadki (tylko dla administratora), request wymaga:
     // 'access_token'
-    // 'image' - zdjecie zagadki (file)
+    // 'imagesource'
     // 'xvalue' - wartosc x (number)
     // 'yvalue' - wartosc y (number)
     // 'description' - opis zdjecia (text)
@@ -46,11 +43,9 @@ class PuzzleController extends Controller
     {
         if (isset($request->access_token)) {
             if (users::where('_token', $request->access_token)->value('IsAdmin')) {
-                if(isset($request->image)) {
+                if(isset($request->imagesource)) {
                     $puzzle = new puzzles;
-                    $img = $request->file('image');
-                    $puzzle->IMGSource = date("Y-m-d H-i-s")." ".$img->getClientOriginalName();
-                    $img->move(storage_path('/images'), $puzzle->IMGSource);
+                    $puzzle->IMGSource = $request->imagesource;
                     if (isset($request->xvalue)) {
                         $puzzle->Xvalue = $request->xvalue;
                     } else $puzzle->Xvalue = 0;
@@ -66,25 +61,21 @@ class PuzzleController extends Controller
                     $puzzle->save();
                     return response([
                         'data' => $puzzle,
-                        'access_token' => $request->access_token,
-                        'message' => 'Retrieve successful'
+                        'message' => 'Puzzle created'
                     ], 200);
                 }
                 return response([
                     'data' => 'null',
-                    'access_token' => $request->access_token,
-                    'message' => 'No file',
+                    'message' => 'No image source',
                 ], 404);
             }
             return response([
                 'data' => 'null',
-                'access_token' => $request->access_token,
                 'message' => 'Unauthorized',
             ], 401);
         }
         return response([
             'data' => 'null',
-            'access_token' => 'null',
             'message' => 'Unauthorized',
         ], 401);
     }
@@ -100,29 +91,25 @@ class PuzzleController extends Controller
                     File::delete(storage_path('/images/').$puzzle->IMGSource);
                     puzzles::where("ID",$request->puzzleid)->delete();
                     return response([
-                        'access_token' => $request->access_token,
                         'message' => 'Puzzle deleted',
                     ], 200);
                 }
                 return response([
-                    'access_token' => $request->access_token,
                     'message' => 'Puzzle not found',
                 ], 404);
             }
             return response([
-                'access_token' => $request->access_token,
                 'message' => 'Unauthorized',
             ], 401);
         }
         return response([
-            'access_token' => 'null',
             'message' => 'Unauthorized',
         ], 401);
     }
 
     //Edytowanie istniejacej zagadki o podanym ID w linku (tylko dla administratora), wartosci do przeslania w request
     // 'access_token'
-    // 'id'
+    // 'puzzleid'
     // 'xvalue' (opcjonalne)
     // 'yvalue' (opcjonalne)
     // 'description' (opcjonalne)
@@ -131,7 +118,7 @@ class PuzzleController extends Controller
     {
         if (isset($request->access_token)) {
             if (users::where('_token', $request->access_token)->value('IsAdmin')) {
-                $ID = $request->id;
+                $ID = $request->puzzleid;
                 if (puzzles::where('ID',$ID)->exists()) {
                     if (isset($request->description)) {
                         puzzles::where('ID', $ID)->update(['IMGDesc' => $request->description]);
@@ -148,22 +135,18 @@ class PuzzleController extends Controller
                         }
                     }
                     return response([
-                        'access_token' => $request->access_token,
                         'message' => 'Modify successful',
                     ], 200);
                 }
                 return response([
-                    'access_token' => $request->access_token,
                     'message' => 'Puzzle not found',
                 ], 404);
             }
             return response([
-                'access_token' => $request->access_token,
                 'message' => 'Unauthorized',
             ], 401);
         }
         return response([
-            'access_token' => 'null',
             'message' => 'Unauthorized',
         ], 401);
     }

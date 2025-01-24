@@ -9,34 +9,34 @@ use App\Http\Controllers\PuzzleController;
 use Illuminate\Console\Scheduling\Schedule;
 
 Route::get('/', function () {
-    return view('login');
+    return view('welcome');
 });
 
 //Users requests
-Route::post('/users/index', [UserController::class, 'index'])->name('user.index');
-Route::post('/users/register', [UserController::class, 'register'])->name('register');
-Route::post('/users/login', [UserController::class, 'login'])->name('login');
-Route::post('/users/modify', [UserController::class, 'modify'])->name('user.modify');
-Route::post('/users/adminmodify', [UserController::class, 'adminmodify'])->name('admin.modify');
-Route::get('/users/google/redirect', [UserController::class, 'redirectToGoogle'])->name('google.redirect');
-Route::get('/users/google/callback', [UserController::class, 'handleGoogleCallback'])->name('google.callback');
-Route::get('/users/facebook/redirect', [UserController::class, 'redirectToFacebook'])->name('facebook.redirect');
-Route::get('/users/facebook/callback', [UserController::class, 'handleFacebookCallback'])->name('facebook.callback');
+Route::post('/api/users/index', [UserController::class, 'index'])->name('user.index');
+Route::post('/api/users/register', [UserController::class, 'register'])->name('register');
+Route::post('/api/users/login', [UserController::class, 'login'])->name('login');
+Route::post('/api/users/modify', [UserController::class, 'modify'])->name('user.modify');
+Route::post('/api/users/adminmodify', [UserController::class, 'adminmodify'])->name('admin.modify');
+Route::get('/api/users/google/redirect', [UserController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/api/users/google/callback', [UserController::class, 'handleGoogleCallback'])->name('google.callback');
+Route::get('/api/users/facebook/redirect', [UserController::class, 'redirectToFacebook'])->name('facebook.redirect');
+Route::get('/api/users/facebook/callback', [UserController::class, 'handleFacebookCallback'])->name('facebook.callback');
 
 //Puzzle requests
-Route::post('/puzzles/index', [PuzzleController::class, 'index'])->name('puzzle.index');
-Route::post('/puzzles/create', [PuzzleController::class, 'create'])->name('create');
-Route::post('/puzzles/delete', [PuzzleController::class, 'delete'])->name('delete');
-Route::post('/puzzles/edit', [PuzzleController::class, 'edit'])->name('edit');
+Route::post('/api/puzzles/index', [PuzzleController::class, 'index'])->name('puzzle.index');
+Route::post('/api/puzzles/create', [PuzzleController::class, 'create'])->name('create');
+Route::post('/api/puzzles/delete', [PuzzleController::class, 'delete'])->name('delete');
+Route::post('/api/puzzles/edit', [PuzzleController::class, 'edit'])->name('edit');
 
 //Guess requests
-Route::post('/guesses/stats', [GuessController::class, 'stats'])->name('stats');
-Route::post('/guesses/scoreboard', [GuessController::class, 'scoreboard'])->name('scoreboard');
+Route::post('/api/guesses/stats', [GuessController::class, 'stats'])->name('stats');
+Route::post('/api/guesses/scoreboard', [GuessController::class, 'scoreboard'])->name('scoreboard');
 
 //Game settings requests
-Route::post('/gamesettings/update', [GamesettingsController::class, 'update'])->name('gamesettings.update');
-Route::post('/gamesettings/get', [GamesettingsController::class, 'get'])->name('gamesettings.get');
+Route::post('/api/gamesettings/update', [GamesettingsController::class, 'update'])->name('gamesettings.update');
+Route::post('/api/gamesettings/get', [GamesettingsController::class, 'get'])->name('gamesettings.get');
 
 //Game requests
-Route::post('/game/get', [GameController::class, 'get'])->name('game.get');
-Route::post('/game/guess', [GameController::class, 'guess'])->name('guess');
+Route::post('/api/game/get', [GameController::class, 'get'])->name('game.get');
+Route::post('/api/game/guess', [GameController::class, 'guess'])->name('guess');

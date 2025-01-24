@@ -32,19 +32,16 @@ class GamesettingsController extends Controller
                 $new->save();
                 return response([
                     'data' => $new,
-                    'access_token' => $request->access_token,
                     'message' => 'Settings saved'
                 ], 200);
             }
             return response([
                 'data' => 'null',
-                'access_token' => $request->access_token,
                 'message' => 'Unauthorized'
             ], 401);
         }
         return response([
             'data' => 'null',
-            'access_token' => 'null',
             'message' => 'Unauthorized'
         ], 401);
     }
@@ -63,7 +60,7 @@ class GamesettingsController extends Controller
 
     //Wziecie ustawien, request wymaga:
     // 'access_token'
-    public function get() {
+    public function get(Request $request) {
         if (isset($request->access_token)) {
             if (users::where('_token', $request->access_token)->value('IsAdmin')) {
                 $newest = gamesettings::all()->sortByDesc('ID')->first();
@@ -73,20 +70,17 @@ class GamesettingsController extends Controller
                 }
                 return response([
                     'data' => $newest,
-                    'access_token' => $request->access_token,
-                    'message' => 'Unauthorized'
-                ], 401);
+                    'message' => 'Data fetched'
+                ], 200);
             }
             return response([
                 'data' => 'null',
-                'access_token' => $request->access_token,
                 'message' => 'Unauthorized'
             ], 401);
         }
         return response([
             'data' => 'null',
-            'access_token' => 'null',
-            'message' => 'Unauthorized'
-        ], 401);
+            'message' => 'Bad Request'
+        ], 400);
     }
 }
