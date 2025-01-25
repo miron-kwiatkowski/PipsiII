@@ -8,8 +8,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PuzzleController;
 use Illuminate\Console\Scheduling\Schedule;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/api', function () {
+    return view('openapi');
 });
 
 //Users requests
@@ -40,3 +40,4 @@ Route::post('/api/gamesettings/get', [GamesettingsController::class, 'get'])->na
 //Game requests
 Route::post('/api/game/get', [GameController::class, 'get'])->name('game.get');
 Route::post('/api/game/guess', [GameController::class, 'guess'])->name('guess');
+Route::post('/api/game/forcereset', [GameController::class, 'forceReset'])->name('reset');

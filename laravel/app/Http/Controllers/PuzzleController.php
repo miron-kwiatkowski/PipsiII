@@ -6,11 +6,29 @@ use App\Models\users;
 use Illuminate\Http\Request;
 use App\Models\puzzles;
 use Illuminate\Support\Facades\File;
+use OpenApi\Annotations as OA;
 
 class PuzzleController extends Controller
 {
-    //Wypisanie wszystkich zagadek (tylko dla administratora), request wymaga:
-    // 'access_token'
+    /**
+     * @OA\Post(
+     *                  path="/api/puzzles/index",
+     *                  tags={"Puzzles"},
+     *                  description="Wylistowanie wszystkich zagadek. Tylko dla administratora.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Retrieve successful"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * )
+     */
     public function index(Request $request)
     {
         if (isset($request->access_token)) {
@@ -32,13 +50,31 @@ class PuzzleController extends Controller
         ], 401);
     }
 
-    //Tworzenie zagadki (tylko dla administratora), request wymaga:
-    // 'access_token'
-    // 'imagesource'
-    // 'xvalue' - wartosc x (number)
-    // 'yvalue' - wartosc y (number)
-    // 'description' - opis zdjecia (text)
-    // 'difficulty' - poziom trudnosci od 1 do 3 (number)
+    /**
+     * @OA\Post(
+     *                  path="/api/puzzles/create",
+     *                  tags={"Puzzles"},
+     *                  description="Tworzenie zagadki. Tylko dla administratora.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *                  "imagesource",
+     *                  "xvalue",
+     *                  "yvalue",
+     *                  "description",
+     *                  "difficulty",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Puzzle created"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * @OA\Response (response="404",description="No image source"),
+     * )
+     */
     public function create(Request $request)
     {
         if (isset($request->access_token)) {
@@ -80,9 +116,27 @@ class PuzzleController extends Controller
         ], 401);
     }
 
-    //Usuniecie zagadki o podanym ID (tylko dla administratora), request wymaga:
-    // 'access_token'
-    // 'puzzleid'
+    /**
+     * @OA\Post(
+     *                  path="/api/puzzles/delete",
+     *                  tags={"Puzzles"},
+     *                  description="Usuniecie zagadki. Tylko dla administratora.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *                  "puzzleid",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Puzzle deleted"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * @OA\Response (response="404",description="Puzzle not found"),
+     * )
+     */
     public function delete(Request $request) {
         if (isset($request->access_token)) {
             if (users::where('_token', $request->access_token)->value('IsAdmin')) {
@@ -107,13 +161,27 @@ class PuzzleController extends Controller
         ], 401);
     }
 
-    //Edytowanie istniejacej zagadki o podanym ID w linku (tylko dla administratora), wartosci do przeslania w request
-    // 'access_token'
-    // 'puzzleid'
-    // 'xvalue' (opcjonalne)
-    // 'yvalue' (opcjonalne)
-    // 'description' (opcjonalne)
-    // 'difficulty' (opcjonalne)
+    /**
+     * @OA\Post(
+     *                  path="/api/puzzles/edit",
+     *                  tags={"Puzzles"},
+     *                  description="Edytowanie zagadki. Tylko dla administratora. Parametry xvalue, yvalue, description i difficulty sa opcjonalne.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *                  "puzzleid",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Modify successful"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * @OA\Response (response="404",description="Puzzle not found"),
+     * )
+     */
     public function edit(Request $request)
     {
         if (isset($request->access_token)) {

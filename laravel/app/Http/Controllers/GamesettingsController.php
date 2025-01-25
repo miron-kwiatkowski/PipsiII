@@ -5,15 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\gamesettings;
 use App\Models\users;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 
 class GamesettingsController extends Controller
 {
-    //Aktualizowanie ustawien gry (tylko dla administratora), wszystkie nieustawione zmienne skopiuja sie z poprzednich ustawien, request wymaga:
-    // 'timereset' - godzina resetu zagadki (opcjonalne)
-    // 'mindistance' - minimalny dystans zeby otrzymac maksimum punktow (opcjonalne)
-    // 'maxdistance' - maksymalny dystans zeby otrzymac punkty (opcjonalne)
-    // 'pointstoqualify' - ilosc punktow aby wygrac (opcjonalne)
-    // 'leaderboarddays' - ile dni jest zliczanych do tablicy wynikow (opcjonalne)
+    /**
+     * @OA\Post(
+     *                  path="/api/gamesettings/update",
+     *                  tags={"Game Settings"},
+     *                  description="Aktualizowanie ustawien gry. Tylko dla administratora. Opcjonalne parametry: timereset, mindistance, maxdistance, pointstoqualify, leaderboarddays.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Settings saved"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * )
+     */
     public function update(Request $request) {
         if (isset($request->access_token)) {
             if (users::where('_token', $request->access_token)->value('IsAdmin')) {
@@ -58,8 +72,26 @@ class GamesettingsController extends Controller
         $default->save();
     }
 
-    //Wziecie ustawien, request wymaga:
-    // 'access_token'
+    /**
+     * @OA\Post(
+     *                  path="/api/gamesettings/get",
+     *                  tags={"Game Settings"},
+     *                  description="Wziecie najnowszych ustawien gry. Tylko dla administratora.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Data fetched"),
+     * @OA\Response (response="400",description="Bad Request"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * )
+     */
     public function get(Request $request) {
         if (isset($request->access_token)) {
             if (users::where('_token', $request->access_token)->value('IsAdmin')) {

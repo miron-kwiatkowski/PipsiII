@@ -8,11 +8,29 @@ use App\Models\users;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Facades\Socialite;
+use OpenApi\Annotations as OA;
 
 class UserController extends Controller
 {
-    //Wylistuj wszystkich uzytkownikow (tylko dla administratora), request wymaga:
-    // 'access_token'
+    /**
+     * @OA\Post(
+     *                  path="/api/users/index",
+     *                  tags={"Users"},
+     *                  description="Wylistuj wszystkich uzytkownikow. Wymaga uprawnien administratora.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Retrieve successful"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * )
+     */
     public function index(Request $request)
     {
         if (isset($request->access_token)) {
@@ -35,10 +53,27 @@ class UserController extends Controller
         ], 401);
     }
 
-    //Rejestracja uzytkownika w bazie danych, request wymaga:
-    // 'name'
-    // 'email'
-    // 'password'
+    /**
+     * @OA\Post(
+     *                  path="/api/users/register",
+     *                  tags={"Users"},
+     *                  description="Rejestracja uzytkownika w bazie danych.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "name",
+     *                  "email",
+     *                  "password",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Registration successful"),
+     * @OA\Response (response="400",description="Bad Request"),
+     * )
+     */
     public function register(Request $request)
     {
         $passwordlength = strlen($request->password);
@@ -74,19 +109,55 @@ class UserController extends Controller
         }
     }
 
-    //Otworzenie autoryzacji google
+    /**
+     * @OA\Get(
+     *                  path="/api/users/google/redirect",
+     *                  tags={"Users"},
+     *                  description="Przejscie na strone autoryzacji google.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Redirecting"),
+     * )
+     */
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
     }
 
-    //Otworzenie autoryzacji facebook
+    /**
+     * @OA\Get(
+     *                  path="/api/users/facebook/redirect",
+     *                  tags={"Users"},
+     *                  description="Przejscie na strone autoryzacji facebook.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Redirecting"),
+     * )
+     */
     public function redirectToFacebook()
     {
         return Socialite::driver('facebook')->redirect();
     }
 
-    //Tworzenie konta i logowanie poprzez google
+    /**
+     * @OA\Get(
+     *                  path="/api/users/google/callback",
+     *                  tags={"Users"},
+     *                  description="Powrot z autoryzacji google, rejestracja i logowanie.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Login successful"),
+     * )
+     */
     public function handleGoogleCallback()
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
@@ -117,7 +188,19 @@ class UserController extends Controller
         }
     }
 
-    //Tworzenie konta i logowanie poprzez facebook
+    /**
+     * @OA\Get(
+     *                  path="/api/users/facebook/callback",
+     *                  tags={"Users"},
+     *                  description="Powrot z autoryzacji facebook, rejestracja i logowanie.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Login successful"),
+     * )
+     */
     public function handleFacebookCallback()
     {
         $facebookUser = Socialite::driver('facebook')->stateless()->user();
@@ -148,9 +231,27 @@ class UserController extends Controller
         }
     }
 
-    //Logowanie przez baze danych, request wymaga:
-    // 'email'
-    // 'password'
+    /**
+     * @OA\Post(
+     *                  path="/api/users/login",
+     *                  tags={"Users"},
+     *                  description="Logowanie przez baze danych.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "email",
+     *                  "password",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Login successful"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * @OA\Response (response="403",description="Forbidden"),
+     * )
+     */
     public function login(Request $request)
     {
         $user = users::where('Email', $request->email)->where('Type','db')->first();
@@ -181,11 +282,25 @@ class UserController extends Controller
         }
     }
 
-    //Modyfikowanie danych uzytkownika, request wymaga:
-    // 'access_token'
-    // 'name' (opcjonalne)
-    // 'pfpnum' (opcjonalne)
-    // 'password' (opcjonalne)
+    /**
+     * @OA\Post(
+     *                  path="/api/users/modify",
+     *                  tags={"Users"},
+     *                  description="Zmiana nicku, zdjecia profilowego i hasla uzytkownika wysylajacego request. Parametry name, pfpnum i password sa opcjonalne.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Modify successful"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * )
+     */
     public function modify(Request $request) {
         if (isset($request->access_token)) {
             if (isset($request->name)) {
@@ -206,12 +321,26 @@ class UserController extends Controller
         ], 401);
     }
 
-    //Modyfikowanie uzytkownika (tylko dla administratora), request wymaga:
-    // 'access_token'
-    // 'userid'
-    // 'currentgame' (opcjonalne)
-    // 'isadmin' (opcjonalne)
-    // 'isbanned' (opcjonalne)
+    /**
+     * @OA\Post(
+     *                  path="/api/users/adminmodify",
+     *                  tags={"Users"},
+     *                  description="Zmiana aktualnej zagadki, roli administratora i banowanie uzytkownikow. Parametry currentgame, isadmin i isbanned sa opcjonalne. Tylko dla administratora.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *                  "userid",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Modify successful"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * )
+     */
     public function adminmodify(Request $request) {
         if (isset($request->access_token)) {
             if (isset($request->userid)) {

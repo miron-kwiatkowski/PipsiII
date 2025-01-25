@@ -8,6 +8,7 @@ use App\Models\users;
 use App\Models\puzzles;
 use Illuminate\Http\Request;
 use function Laravel\Prompts\select;
+use OpenApi\Annotations as OA;
 
 class GameController extends Controller
 {
@@ -30,8 +31,26 @@ class GameController extends Controller
         }
     }
 
-    //Wez zagadke uzytkownika, jesli jest juz rozwiazana pokaz wynik, request wymaga:
-    // 'access_token'
+    /**
+     * @OA\Post(
+     *                  path="/api/game/get",
+     *                  tags={"Game"},
+     *                  description="Wziecie aktualnej gry uzytkownika. Jesli jest juz rozwiazana, zwraca statystyki wyboru.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Stats displayed"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * @OA\Response (response="404",description="Puzzle not found"),
+     * )
+     */
     public function get(Request $request) {
         if (isset($request->access_token)) {
             $userid = (users::where('_token', $request->access_token)->value('ID'));
@@ -66,11 +85,30 @@ class GameController extends Controller
         ], 401);
     }
 
-    //Przesylanie zgadniec, request wymaga:
-    // 'access_token' - numer uzytkownika (number)
-    // 'xvalue' - wspolrzedna X (number)
-    // 'yvalue' - wspolrzedna Y (number)
-    // 'time' - ile czasu zajelo rozwiazanie zagadki w sekundach (number)
+    /**
+     * @OA\Post(
+     *                  path="/api/game/guess",
+     *                  tags={"Game"},
+     *                  description="Przeslanie odpowiedzi uzytkownika na jego aktualna zagadke.",
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType="json",
+     *     @OA\Schema(
+     *          required={
+     *                  "access_token",
+     *                  "xvalue",
+     *                  "yvalue",
+     *                  "time",
+     *          }
+     *     ),
+     *     )
+     * ),
+     * @OA\Response (response="200",description="Guess saved"),
+     * @OA\Response (response="400",description="Bad Request"),
+     * @OA\Response (response="401",description="Unauthorized"),
+     * @OA\Response (response="404",description="Data not found"),
+     * )
+     */
     public function guess(Request $request) {
         if (isset($request->access_token)) {
             $x1 = $request->xvalue;
@@ -128,6 +166,26 @@ class GameController extends Controller
                 'data' => 'null',
                 'message' => 'Bad request'
             ], 400);
+        }
+        return response([
+            'data' => 'null',
+            'message' => 'Unauthorized'
+        ], 401);
+    }
+
+    // Wymuszenie restartu zagadek u wszystkich uzytkownikow
+    public function forceReset(Request $request) {
+        if (isset($request->access_token)) {
+            if (users::where('_token', $request->access_token)->value('IsAdmin')) {
+                GameController::reset();
+                return response([
+                    'message' => 'Reset successful'
+                ], 200);
+            }
+            return response([
+                'data' => 'null',
+                'message' => 'Unauthorized'
+            ], 401);
         }
         return response([
             'data' => 'null',
