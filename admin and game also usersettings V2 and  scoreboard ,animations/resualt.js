@@ -1,9 +1,4 @@
-// Przykładowe dane graczy
-const players = [
-    { rank: 1, name: "Alice", score: 150, time: "1:20" },
-    { rank: 2, name: "Bob", score: 120, time: "1:45" },
-    { rank: 3, name: "Charlie", score: 100, time: "2:10" },
-];
+
 
 // Funkcja do wypełnienia tabeli wynikowej
 function populateScoreboard() {
